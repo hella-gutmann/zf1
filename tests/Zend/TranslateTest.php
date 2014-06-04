@@ -234,6 +234,23 @@ class Zend_TranslateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Nachricht 8', $lang->translate('Message 8'));
     }
 
+    public function testFileSearchIssue369()
+    {
+        $lang = new Zend_Translate(Zend_Translate::AN_ARRAY, dirname(__FILE__) . '/Translate/Adapter/_files/issue-369', 'en', array('scan' => Zend_Translate::LOCALE_FILENAME));
+
+        /* @todo fix https://github.com/zendframework/zf1/issues/369 */
+        $this->assertEquals(
+            array(
+                'en' => array('__language__' => 'english'),
+                'no' => array('__language__' => 'norsk')
+            ),
+            $lang->getMessages('all')
+        );
+
+        $this->assertEquals(array('en' => 'en', 'no' => 'no'), $lang->getList());
+        $this->assertEquals('en', $lang->translate('__language__'));
+    }
+
     public function testTestingCacheHandling()
     {
         require_once 'Zend/Cache.php';
